@@ -75,7 +75,7 @@ export function Hero() {
             >
               {[
                 { value: "+3", label: "سنوات خبرة" },
-                { value: "+20", label: "مشروع منجز" },
+                { value: "+9", label: "مشاريع منجز" },
                 { value: "2", label: "أقسام متخصّصة" },
               ].map((s) => (
                 <div key={s.label}>

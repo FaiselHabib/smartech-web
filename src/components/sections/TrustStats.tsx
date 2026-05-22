@@ -5,7 +5,7 @@ import { Award, MapPin, Sparkles, Users2 } from "lucide-react";
 
 const stats = [
   { icon: Award, value: "+3", label: "سنوات خبرة", sub: "في السوق السعودي" },
-  { icon: Sparkles, value: "+20", label: "مشروع منجز", sub: "أنظمة وميديا" },
+  { icon: Sparkles, value: "+9", label: "مشاريع منجز", sub: "أنظمة وميديا" },
   { icon: MapPin, value: "100%", label: "سعودي", sub: "من جدة إلى المملكة" },
   { icon: Users2, value: "Systems + Media", label: "فريق متكامل", sub: "تحت سقف واحد" },
 ];
