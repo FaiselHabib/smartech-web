@@ -58,18 +58,23 @@ export function AnimatedBrandMark({ className }: { className?: string }) {
       <div className="absolute inset-[22%] rounded-full bg-brand-mint/25 blur-3xl" />
       <div className="absolute inset-[28%] rounded-full bg-brand-mint/20 blur-2xl" />
 
-      {/* Center icon — floating */}
+      {/* Center icon — floating.
+          Outer wrapper fills the ENTIRE orbit container (inset-0) so its flex
+          centerpoint is the exact geometric center of the orbit on every device.
+          Inner wrapper has an EXPLICIT width (as % of the orbit container) plus
+          aspect-square — eliminating the indefinite-parent percentage bug that
+          caused the icon to drift on mobile WebKit/Blink. */}
       <motion.div
-        className="absolute inset-[22%] flex items-center justify-center"
+        className="pointer-events-none absolute inset-0 flex items-center justify-center"
         animate={{ y: [0, -10, 0] }}
         transition={{ duration: 5, ease: "easeInOut", repeat: Infinity }}
       >
         <motion.div
           animate={{ scale: [1, 1.03, 1] }}
           transition={{ duration: 3.2, ease: "easeInOut", repeat: Infinity }}
-          className="relative"
+          className="relative aspect-square w-[44%] sm:w-[56%] flex items-center justify-center"
         >
-          {/* Image-level glow halo */}
+          {/* Image-level glow halo — now anchored to a definite-size parent */}
           <div className="absolute inset-0 -m-6 rounded-full bg-brand-mint/45 blur-2xl" />
           <Image
             src="/brand/icon-mint.png"
@@ -77,8 +82,8 @@ export function AnimatedBrandMark({ className }: { className?: string }) {
             width={420}
             height={420}
             priority
-            sizes="(max-width: 768px) 240px, 360px"
-            className="relative w-[78%] h-[78%] sm:w-full sm:h-full select-none drop-shadow-[0_18px_30px_rgba(57,210,192,0.45)]"
+            sizes="(max-width: 768px) 220px, 360px"
+            className="relative block h-full w-full select-none drop-shadow-[0_18px_30px_rgba(57,210,192,0.45)]"
           />
         </motion.div>
       </motion.div>
