@@ -40,7 +40,6 @@ export const site = {
 export const nav = [
   { href: "/", label: "الرئيسية" },
   { href: "/systems", label: "الأنظمة" },
-  { href: "/media", label: "الميديا" },
   { href: "/portfolio", label: "الأعمال" },
   { href: "/services", label: "الخدمات" },
   { href: "/about", label: "من نحن" },
