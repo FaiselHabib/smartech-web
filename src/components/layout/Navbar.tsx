@@ -38,7 +38,7 @@ export function Navbar() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled
-          ? "bg-white/85 backdrop-blur-xl border-b border-brand-teal/10 shadow-soft"
+          ? "bg-white/95 lg:bg-white/85 lg:backdrop-blur-xl border-b border-brand-teal/10 shadow-soft"
           : "bg-transparent",
       )}
     >
@@ -84,7 +84,7 @@ export function Navbar() {
         <button
           onClick={() => setOpen((s) => !s)}
           aria-label="القائمة"
-          className="lg:hidden inline-flex size-11 items-center justify-center rounded-full border border-brand-teal/10 bg-white/80 backdrop-blur"
+          className="lg:hidden inline-flex size-11 items-center justify-center rounded-full border border-brand-teal/10 bg-white shadow-soft"
         >
           {open ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>
@@ -98,7 +98,7 @@ export function Navbar() {
         )}
       >
         <div className="container-pad pb-6">
-          <div className="rounded-3xl border border-brand-teal/10 bg-white/95 backdrop-blur-xl p-4 shadow-glass">
+          <div className="rounded-3xl border border-brand-teal/10 bg-white p-4 shadow-glass">
             <nav className="flex flex-col">
               {nav.map((item) => {
                 const active =

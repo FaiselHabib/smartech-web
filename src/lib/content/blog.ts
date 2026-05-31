@@ -11,7 +11,7 @@ const POST_LIST_COLUMNS =
 const POST_FULL_COLUMNS = `${POST_LIST_COLUMNS},content`;
 
 /** Abort a slow query so the page falls back to static instead of hanging. */
-const QUERY_TIMEOUT_MS = 2500;
+const QUERY_TIMEOUT_MS = 1500;
 
 type PostPublicRow = Pick<
   BlogPostRow,

@@ -11,6 +11,7 @@ import {
   Aperture,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { useAnimationEnabled } from "@/lib/hooks/useAnimationEnabled";
 
 const capabilities = [
   { icon: Plane, label: "أسطول درون احترافي 4K" },
@@ -22,6 +23,7 @@ const capabilities = [
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
 export function MediaHero() {
+  const animate = useAnimationEnabled();
   return (
     <section className="relative overflow-hidden bg-brand-tealDeep text-white pt-[140px] pb-20">
       {/* Cinematic backdrop */}
@@ -45,8 +47,8 @@ export function MediaHero() {
           backgroundSize: "3px 3px",
         }}
       />
-      <div className="absolute -top-20 right-0 -z-10 size-[520px] rounded-full bg-brand-mint/15 blur-[120px]" />
-      <div className="absolute -bottom-32 -left-32 -z-10 size-[460px] rounded-full bg-brand-mint/10 blur-[120px]" />
+      <div className="absolute -top-20 right-0 -z-10 size-[520px] rounded-full bg-brand-mint/15 blur-3xl sm:blur-[120px]" />
+      <div className="absolute -bottom-32 -left-32 -z-10 size-[460px] rounded-full bg-brand-mint/10 blur-3xl sm:blur-[120px]" />
 
       <div className="container-pad relative">
         <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
@@ -56,7 +58,7 @@ export function MediaHero() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: easeOut }}
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 backdrop-blur px-3.5 py-1.5 text-xs font-semibold text-brand-mint"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 sm:bg-white/5 sm:backdrop-blur px-3.5 py-1.5 text-xs font-semibold text-brand-mint"
             >
               <Circle className="size-2 fill-red-500 text-red-500" />
               REC · Smartech Media
@@ -116,8 +118,8 @@ export function MediaHero() {
                 <span className="inline-flex items-center gap-1.5">
                   <motion.span
                     className="size-1.5 rounded-full bg-red-500"
-                    animate={{ opacity: [1, 0.3, 1] }}
-                    transition={{ duration: 1.4, repeat: Infinity }}
+                    animate={animate ? { opacity: [1, 0.3, 1] } : undefined}
+                    transition={animate ? { duration: 1.4, repeat: Infinity } : undefined}
                   />
                   REC 4K · 23.976
                 </span>
@@ -142,8 +144,8 @@ export function MediaHero() {
               {/* Center aperture animation */}
               <motion.div
                 className="absolute inset-0 flex items-center justify-center"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 24, ease: "linear", repeat: Infinity }}
+                animate={animate ? { rotate: 360 } : undefined}
+                transition={animate ? { duration: 24, ease: "linear", repeat: Infinity } : undefined}
               >
                 <Aperture
                   className="size-32 text-white/15"
@@ -153,9 +155,9 @@ export function MediaHero() {
 
               {/* Floating camera badge */}
               <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 4.5, ease: "easeInOut", repeat: Infinity }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-black/30 backdrop-blur px-3 py-2"
+                animate={animate ? { y: [0, -8, 0] } : undefined}
+                transition={animate ? { duration: 4.5, ease: "easeInOut", repeat: Infinity } : undefined}
+                className="absolute left-4 top-1/2 -translate-y-1/2 inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-black/40 sm:bg-black/30 sm:backdrop-blur px-3 py-2"
               >
                 <Camera className="size-4 text-brand-mint" />
                 <div className="text-[10px] font-bold uppercase tracking-widest text-white/90">
@@ -164,9 +166,9 @@ export function MediaHero() {
               </motion.div>
 
               <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 5.5, ease: "easeInOut", repeat: Infinity }}
-                className="absolute right-4 bottom-12 inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-black/30 backdrop-blur px-3 py-2"
+                animate={animate ? { y: [0, 10, 0] } : undefined}
+                transition={animate ? { duration: 5.5, ease: "easeInOut", repeat: Infinity } : undefined}
+                className="absolute right-4 bottom-12 inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-black/40 sm:bg-black/30 sm:backdrop-blur px-3 py-2"
               >
                 <Plane className="size-4 text-brand-mint" />
                 <div className="text-[10px] font-bold uppercase tracking-widest text-white/90">

@@ -1,44 +1,47 @@
 "use client";
 
-import { motion, useReducedMotion, type TargetAndTransition } from "framer-motion";
+import { motion, type TargetAndTransition } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { useAnimationEnabled } from "@/lib/hooks/useAnimationEnabled";
 
 /**
  * Premium animated Smartech brand centerpiece for the hero section.
  *
  * Uses the OFFICIAL mint icon from /public/brand/icon-mint.png — no generated SVG.
- * Built from CSS + Framer Motion (lightweight, GPU-accelerated):
- *  - Rotating conic-gradient halo
- *  - Two counter-rotating dashed orbit rings
- *  - Soft floating motion on the icon
- *  - Pulsing radial glow
- *  - Glassmorphism plate
+ *
+ * MOBILE PERFORMANCE: continuous animations and the most expensive paint
+ * effects (rotating conic gradient, large/animated blurs, backdrop-filter on
+ * chips, the pulsing 80px ambient glow) are the main source of jank on phones.
+ * We therefore:
+ *   - gate every infinite Framer Motion loop behind `useAnimationEnabled()`
+ *     (desktop + no reduced-motion) — on mobile the mark is fully STATIC,
+ *   - drop the conic gradient entirely on mobile (`hidden sm:block`),
+ *   - shrink blur radii on mobile,
+ *   - drop backdrop-filter on the chips on mobile.
+ * Desktop keeps the full premium look; the DOM/layout is identical, so there is
+ * no layout shift.
  */
 export function AnimatedBrandMark({ className }: { className?: string }) {
-  // Honour the OS "Reduce Motion" setting (and low-power/accessibility modes).
-  // When set, we render the mark fully static — no continuous repaints — which
-  // removes the sustained GPU/CPU cost on low-end mobiles without changing the
-  // visual identity for everyone else.
-  const reduce = useReducedMotion();
-  const loop = (animate: TargetAndTransition, duration: number) =>
-    reduce
-      ? {}
-      : { animate, transition: { duration, ease: "linear" as const, repeat: Infinity } };
+  const animate = useAnimationEnabled();
+  const loop = (target: TargetAndTransition, duration: number) =>
+    animate
+      ? { animate: target, transition: { duration, ease: "linear" as const, repeat: Infinity } }
+      : {};
   return (
     <div className={cn("relative mx-auto aspect-square w-full max-w-[460px]", className)}>
-      {/* Outer ambient glow */}
+      {/* Outer ambient glow — smaller blur on mobile, pulse only on desktop */}
       <div
         className={cn(
-          "absolute inset-0 -z-10 rounded-full bg-brand-mint/25 blur-[80px] [animation-duration:4s]",
-          !reduce && "animate-pulse",
+          "absolute inset-0 -z-10 rounded-full bg-brand-mint/25 blur-2xl sm:blur-[80px] [animation-duration:4s]",
+          animate && "animate-pulse",
         )}
       />
 
-      {/* Conic rotating halo (large) */}
+      {/* Conic rotating halo (large) — desktop only; pure decoration, removed on mobile */}
       <motion.div
         aria-hidden
-        className="absolute inset-2 rounded-full opacity-60 [mask-image:radial-gradient(closest-side,transparent_55%,black_60%,black_70%,transparent_75%)]"
+        className="hidden sm:block absolute inset-2 rounded-full opacity-60 [mask-image:radial-gradient(closest-side,transparent_55%,black_60%,black_70%,transparent_75%)]"
         style={{
           background:
             "conic-gradient(from 0deg, transparent 0deg, #39D2C0 90deg, transparent 180deg, #7FE3D6 270deg, transparent 360deg)",
@@ -46,7 +49,7 @@ export function AnimatedBrandMark({ className }: { className?: string }) {
         {...loop({ rotate: 360 }, 18)}
       />
 
-      {/* Orbit ring 1 (dashed, slow CW) */}
+      {/* Orbit ring 1 (dashed) — static on mobile, rotates on desktop */}
       <motion.div
         aria-hidden
         className="absolute inset-6 rounded-full border-2 border-dashed border-brand-mint/40"
@@ -55,7 +58,7 @@ export function AnimatedBrandMark({ className }: { className?: string }) {
         <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 size-3 rounded-full bg-brand-mint shadow-[0_0_20px_rgba(57,210,192,0.9)]" />
       </motion.div>
 
-      {/* Orbit ring 2 (thinner, CCW) */}
+      {/* Orbit ring 2 (thinner) — static on mobile, rotates on desktop */}
       <motion.div
         aria-hidden
         className="absolute inset-12 rounded-full border border-brand-teal/15"
@@ -65,28 +68,25 @@ export function AnimatedBrandMark({ className }: { className?: string }) {
         <span className="absolute bottom-2 left-3 size-1.5 rounded-full bg-brand-mint/80" />
       </motion.div>
 
-      {/* Inner mint halo behind icon — no plate, fully transparent */}
-      <div className="absolute inset-[22%] rounded-full bg-brand-mint/25 blur-3xl" />
-      <div className="absolute inset-[28%] rounded-full bg-brand-mint/20 blur-2xl" />
+      {/* Inner mint halo behind icon — smaller blur on mobile */}
+      <div className="absolute inset-[22%] rounded-full bg-brand-mint/25 blur-xl sm:blur-3xl" />
+      <div className="absolute inset-[28%] rounded-full bg-brand-mint/20 blur-lg sm:blur-2xl" />
 
-      {/* Center icon — floating.
-          Outer wrapper fills the ENTIRE orbit container (inset-0) so its flex
-          centerpoint is the exact geometric center of the orbit on every device.
-          Inner wrapper has an EXPLICIT width (as % of the orbit container) plus
-          aspect-square — eliminating the indefinite-parent percentage bug that
-          caused the icon to drift on mobile WebKit/Blink. */}
+      {/* Center icon. Outer wrapper fills the orbit (inset-0) and flex-centers,
+          guaranteeing the icon is centered on every device. Float/scale only on
+          desktop. */}
       <motion.div
         className="pointer-events-none absolute inset-0 flex items-center justify-center"
-        animate={reduce ? undefined : { y: [0, -10, 0] }}
-        transition={reduce ? undefined : { duration: 5, ease: "easeInOut", repeat: Infinity }}
+        animate={animate ? { y: [0, -10, 0] } : undefined}
+        transition={animate ? { duration: 5, ease: "easeInOut", repeat: Infinity } : undefined}
       >
         <motion.div
-          animate={reduce ? undefined : { scale: [1, 1.03, 1] }}
-          transition={reduce ? undefined : { duration: 3.2, ease: "easeInOut", repeat: Infinity }}
+          animate={animate ? { scale: [1, 1.03, 1] } : undefined}
+          transition={animate ? { duration: 3.2, ease: "easeInOut", repeat: Infinity } : undefined}
           className="relative aspect-square w-[44%] sm:w-[56%] flex items-center justify-center"
         >
-          {/* Image-level glow halo — now anchored to a definite-size parent */}
-          <div className="absolute inset-0 -m-6 rounded-full bg-brand-mint/45 blur-2xl" />
+          {/* Image-level glow halo — smaller blur on mobile */}
+          <div className="absolute inset-0 -m-6 rounded-full bg-brand-mint/45 blur-lg sm:blur-2xl" />
           <Image
             src="/brand/icon-mint.png"
             alt="Smartech"
@@ -94,13 +94,14 @@ export function AnimatedBrandMark({ className }: { className?: string }) {
             height={420}
             priority
             sizes="(max-width: 768px) 220px, 360px"
-            className="relative block h-full w-full select-none drop-shadow-[0_18px_30px_rgba(57,210,192,0.45)]"
+            className="relative block h-full w-full select-none drop-shadow-[0_8px_16px_rgba(57,210,192,0.35)] sm:drop-shadow-[0_18px_30px_rgba(57,210,192,0.45)]"
           />
         </motion.div>
       </motion.div>
 
       {/* Floating chips */}
       <FloatingChip
+        animate={animate}
         delay={0}
         className="-top-2 right-2 sm:right-4"
         label="Smartech Systems"
@@ -108,6 +109,7 @@ export function AnimatedBrandMark({ className }: { className?: string }) {
         dot="bg-brand-mint"
       />
       <FloatingChip
+        animate={animate}
         delay={0.5}
         className="bottom-1 left-1 sm:left-4"
         label="Smartech Media"
@@ -116,6 +118,7 @@ export function AnimatedBrandMark({ className }: { className?: string }) {
         dark
       />
       <FloatingChip
+        animate={animate}
         delay={1}
         className="top-1/2 -right-2 sm:-right-6 -translate-y-1/2"
         label="AI"
@@ -133,6 +136,7 @@ function FloatingChip({
   dot,
   dark,
   delay = 0,
+  animate,
 }: {
   className?: string;
   label: string;
@@ -140,18 +144,21 @@ function FloatingChip({
   dot: string;
   dark?: boolean;
   delay?: number;
+  animate?: boolean;
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: [0, -6, 0] }}
-      transition={{
-        opacity: { duration: 0.6, delay: 0.4 + delay },
-        y: { duration: 4, ease: "easeInOut", repeat: Infinity, delay },
-      }}
+      animate={animate ? { y: [0, -6, 0] } : undefined}
+      transition={
+        animate
+          ? { y: { duration: 4, ease: "easeInOut", repeat: Infinity, delay } }
+          : undefined
+      }
       className={cn(
-        "absolute z-10 flex items-center gap-3 rounded-2xl border shadow-glass px-3.5 py-2.5 backdrop-blur-xl",
-        dark ? "bg-brand-teal/90 text-white border-white/10" : "bg-white/90 border-brand-teal/10",
+        // backdrop-blur only on desktop (sm+) — backdrop-filter is a top cause of
+        // mobile paint/scroll jank. Chips use a near-solid background on mobile.
+        "absolute z-10 flex items-center gap-3 rounded-2xl border shadow-glass px-3.5 py-2.5 sm:backdrop-blur-xl",
+        dark ? "bg-brand-teal text-white border-white/10 sm:bg-brand-teal/90" : "bg-white border-brand-teal/10 sm:bg-white/90",
         className,
       )}
     >

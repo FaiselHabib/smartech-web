@@ -48,7 +48,7 @@ type ProjectPublicRow = Pick<
 >;
 
 /** Abort a slow query so the page falls back to static instead of hanging. */
-const QUERY_TIMEOUT_MS = 2500;
+const QUERY_TIMEOUT_MS = 1500;
 
 function rowToProject(row: ProjectPublicRow): Project {
   return {
