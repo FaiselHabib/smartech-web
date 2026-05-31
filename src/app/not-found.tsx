@@ -9,7 +9,6 @@ import { site } from "@/lib/site";
 
 const quickLinks = [
   { href: "/systems", label: "الأنظمة" },
-  { href: "/media", label: "الميديا" },
   { href: "/portfolio", label: "الأعمال" },
   { href: "/services", label: "الخدمات" },
   { href: "/blog", label: "المدونة" },

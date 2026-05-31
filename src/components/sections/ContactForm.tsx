@@ -8,17 +8,29 @@ import { site } from "@/lib/site";
 import { submitContactRequestAction } from "@/app/actions/contact";
 
 const projectTypes = [
-  { value: "software", label: "مشروع برمجي" },
-  { value: "media", label: "مشروع إعلامي" },
-  { value: "both", label: "الاثنين معاً" },
+  { value: "website", label: "تطوير موقع" },
+  { value: "mobile", label: "تطبيق جوال" },
+  { value: "system", label: "نظام أعمال" },
+  { value: "dashboard", label: "لوحة تحكم" },
+  { value: "ai", label: "حل ذكاء اصطناعي" },
   { value: "consultation", label: "استشارة" },
 ];
+
+// Map the software-focused UI options to the existing DB request_type enum values.
+const REQUEST_TYPE_MAP: Record<string, string> = {
+  website: "software",
+  mobile: "software",
+  system: "software",
+  dashboard: "software",
+  ai: "software",
+  consultation: "consultation",
+};
 
 const budgets = ["أقل من 10 آلاف", "10–30 ألف", "30–80 ألف", "+80 ألف"];
 
 export function ContactForm() {
   const pathname = usePathname();
-  const [type, setType] = React.useState("software");
+  const [type, setType] = React.useState("website");
   const [submitted, setSubmitted] = React.useState(false);
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -36,6 +48,7 @@ export function ContactForm() {
     const email = String(fd.get("email") || "");
     const budget = String(fd.get("budget") || "");
     const message = String(fd.get("message") || "");
+    const typeLabel = projectTypes.find((t) => t.value === type)?.label ?? "";
 
     // 1) Persist to Supabase via Server Action.
     const payload = new FormData();
@@ -43,9 +56,11 @@ export function ContactForm() {
     payload.set("phone", phone);
     if (email) payload.set("email", email);
     if (company) payload.set("company", company);
-    payload.set("project_type", type);
+    payload.set("project_type", REQUEST_TYPE_MAP[type] ?? "software");
     if (budget) payload.set("budget", budget);
-    if (message) payload.set("message", message);
+    // Keep the granular service choice for the admin by prepending it to the message.
+    const fullMessage = `نوع الخدمة: ${typeLabel}${message ? `\n${message}` : ""}`;
+    payload.set("message", fullMessage);
     if (pathname) payload.set("source_page", pathname);
 
     const res = await submitContactRequestAction(null, payload);
@@ -94,7 +109,7 @@ export function ContactForm() {
         <label className="text-sm font-semibold text-brand-teal mb-2 block">
           نوع المشروع
         </label>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           {projectTypes.map((t) => (
             <button
               key={t.value}

@@ -74,11 +74,9 @@ export function ProjectForm({
             <Field label="التصنيف" required error={err("category")}>
               <Select name="category" defaultValue={initial?.category ?? "systems"}>
                 <option value="systems">أنظمة</option>
-                <option value="media">إعلامي</option>
                 <option value="website">موقع ويب</option>
                 <option value="app">تطبيق</option>
                 <option value="dashboard">داشبورد</option>
-                <option value="drone">درون</option>
                 <option value="branding">هوية</option>
               </Select>
             </Field>

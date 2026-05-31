@@ -1,10 +1,8 @@
 export type ProjectCategory =
   | "systems"
-  | "media"
   | "websites"
   | "apps"
-  | "dashboards"
-  | "drone";
+  | "dashboards";
 
 export type Project = {
   slug: string;
@@ -72,38 +70,12 @@ export const projects: Project[] = [
     tech: ["Next.js", "Stripe", "PWA"],
     year: "2025",
   },
-  {
-    slug: "real-estate-drone",
-    title: "تصوير عقاري بالدرون",
-    tagline: "إنتاج مرئي لمشاريع عقارية سعودية",
-    cover: "/portfolio/drone-cover.jpg",
-    categories: ["media", "drone"],
-    problem: "حاجة المطوّرين العقاريين لمحتوى مرئي عالي الجودة يُبرز قيمة المشروع.",
-    solution: "جلسات تصوير جوّية وأرضية مع مونتاج سينمائي وهوية بصرية موحّدة.",
-    impact: "ارتفاع التفاعل على السوشيال وتسريع البيع.",
-    tech: ["DJI", "DaVinci Resolve", "After Effects"],
-    year: "2025",
-  },
-  {
-    slug: "corporate-reel-series",
-    title: "سلسلة ريلز شركات",
-    tagline: "محتوى قصير لشركات سعودية ناشئة",
-    cover: "/portfolio/reels-cover.jpg",
-    categories: ["media"],
-    problem: "حاجة الشركات لمحتوى منتظم وعالي الجودة لتغذية حساباتها.",
-    solution: "خطة محتوى شهرية، تصوير، مونتاج، وإخراج بأسلوب موحّد.",
-    impact: "نمو في الوصول والمتابعين خلال 3 أشهر فقط.",
-    tech: ["Premiere", "AI Color", "Sony FX3"],
-    year: "2025",
-  },
 ];
 
 export const projectFilters: { value: ProjectCategory | "all"; label: string }[] = [
   { value: "all", label: "الكل" },
   { value: "systems", label: "أنظمة" },
-  { value: "media", label: "ميديا" },
   { value: "websites", label: "مواقع" },
   { value: "apps", label: "تطبيقات" },
   { value: "dashboards", label: "داشبورد" },
-  { value: "drone", label: "درون" },
 ];

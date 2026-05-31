@@ -56,7 +56,7 @@ export default async function OG() {
             maxWidth: 1000,
           }}
         >
-          نبني الأنظمة ونصنع المحتوى
+          نبني الأنظمة الذكية
         </div>
         <div
           style={{
@@ -66,7 +66,7 @@ export default async function OG() {
             maxWidth: 900,
           }}
         >
-          شركة سعودية تجمع الحلول البرمجية والإنتاج الإعلامي
+          شركة سعودية متخصّصة في تطوير البرمجيات
         </div>
         <div
           style={{
@@ -95,7 +95,7 @@ export default async function OG() {
               fontWeight: 700,
             }}
           >
-            Smartech Media
+            AI Solutions
           </span>
         </div>
       </div>

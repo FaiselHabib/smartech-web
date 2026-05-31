@@ -6,13 +6,8 @@ import {
   type Project,
 } from "@/content/projects";
 
-// Homepage is software-only — exclude media/drone projects from the showcase.
-const MEDIA_CATEGORIES = ["media", "drone"];
-
 export function FeaturedProjects({ projects }: { projects?: Project[] } = {}) {
-  const featured = (projects ?? staticProjects)
-    .filter((p) => !p.categories.some((c) => MEDIA_CATEGORIES.includes(c)))
-    .slice(0, 6);
+  const featured = (projects ?? staticProjects).slice(0, 6);
 
   return (
     <Section className="bg-brand-mintSoft/50">

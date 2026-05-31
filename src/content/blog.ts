@@ -3,7 +3,7 @@ export type BlogPost = {
   title: string;
   excerpt: string;
   cover: string;
-  category: "أنظمة" | "تطبيقات" | "مواقع" | "ميديا" | "ذكاء اصطناعي";
+  category: "أنظمة" | "تطبيقات" | "مواقع" | "ذكاء اصطناعي";
   readingTime: number;
   date: string;
   content: string;
@@ -40,17 +40,6 @@ export const posts: BlogPost[] = [
     readingTime: 4,
     date: "2025-10-14",
     content: `يتميّز كل من الموقع والتطبيق بجوانب فريدة. الموقع أوسع وصولاً ومناسب للسيو، بينما التطبيق يقدّم تجربة أعمق ووصول للإشعارات. غالباً يحتاج المشروع كلاهما.`,
-  },
-  {
-    slug: "drone-for-real-estate",
-    title: "أهمية تصوير الدرون للمشاريع العقارية",
-    excerpt:
-      "كيف يُسرّع التصوير الجوّي البيع ويرفع قيمة المشروع العقاري بصرياً.",
-    cover: "/blog/drone-real-estate.jpg",
-    category: "ميديا",
-    readingTime: 5,
-    date: "2025-11-20",
-    content: `أصبح تصوير الدرون عنصراً أساسياً في تسويق العقار. يُبرز الموقع، المساحات، الخدمات المحيطة، ويُعطي العميل تصوّراً كاملاً قبل الزيارة.`,
   },
   {
     slug: "ai-in-systems",

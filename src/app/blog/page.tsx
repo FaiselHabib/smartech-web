@@ -11,7 +11,7 @@ import { arabicNumber } from "@/lib/utils";
 export const metadata = buildMetadata({
   title: "المدونة",
   description:
-    "مقالات وأدلة من سمارتك جروب: برمجة، تطبيقات، أنظمة، تصوير درون، وإنتاج محتوى.",
+    "مقالات وأدلة من سمارتك جروب: برمجة، تطبيقات، أنظمة أعمال، ولوحات تحكم، وحلول ذكاء اصطناعي.",
   path: "/blog",
 });
 
@@ -38,10 +38,10 @@ export default async function BlogPage() {
         title={
           <>
             أفكار وأدلة في{" "}
-            <span className="text-gradient">البرمجة والإعلام</span>
+            <span className="text-gradient">تطوير البرمجيات</span>
           </>
         }
-        description="نشارك تجربتنا في تطوير الأنظمة، تطبيقات الجوال، والإنتاج البصري داخل السوق السعودي."
+        description="نشارك تجربتنا في تطوير الأنظمة، تطبيقات الجوال، ولوحات التحكم، وحلول الذكاء الاصطناعي داخل السوق السعودي."
       />
 
       <Section className="pt-0">

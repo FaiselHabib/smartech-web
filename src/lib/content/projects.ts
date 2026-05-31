@@ -17,7 +17,11 @@ function dbCategoryToUI(c: ProjectCategoryDB): Project["categories"][number] {
       return "apps";
     case "dashboard":
       return "dashboards";
+    // Legacy media/drone/branding rows are normalised to a software category
+    // so the software-only UI keeps rendering them without media wording.
     case "branding":
+    case "media":
+    case "drone":
       return "systems";
     default:
       return c;

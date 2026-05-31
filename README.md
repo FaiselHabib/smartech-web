@@ -2,9 +2,7 @@
 
 موقع شركة **سمارتك جروب** (Smartech Group) — Next.js 15 App Router · TypeScript · Tailwind · Framer Motion · RTL Arabic-first · SEO-ready · Vercel-ready.
 
-> Positioning: *Smartech Group is a Saudi company that builds digital systems and creates visual content* — under two divisions:
-> - **Smartech Systems** (software, apps, dashboards, AI, support)
-> - **Smartech Media** (drone, video, real-estate, reels, AI editing)
+> Positioning: *Smartech Group is a Saudi software development company* — building software, apps, dashboards, AI, and support (Smartech Systems).
 
 ---
 
@@ -49,11 +47,11 @@ src/
 ├── components/
 │   ├── brand/Logo.tsx
 │   ├── layout/                # Navbar, Footer, WhatsAppFAB
-│   ├── sections/              # Hero, DivisionCards, TrustStats, ServiceGrid …
+│   ├── sections/              # Hero, Services, FeaturedProjects, ServiceGrid …
 │   └── ui/                    # Button, Card, Badge, Section primitives
 │
 ├── content/                   # Editable data
-│   ├── services.ts            # Systems + Media services
+│   ├── services.ts            # Software development services
 │   ├── projects.ts            # Portfolio case studies
 │   └── blog.ts                # Blog posts
 │

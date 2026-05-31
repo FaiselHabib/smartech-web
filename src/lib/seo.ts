@@ -50,6 +50,7 @@ export const organizationSchema = {
   "@type": "Organization",
   name: site.nameEn,
   alternateName: site.name,
+  description: site.description,
   url: site.url,
   logo: `${site.url}/brand/smartech-logo.png`,
   sameAs: [site.contact.instagram, site.contact.tiktok],
@@ -66,8 +67,9 @@ export const organizationSchema = {
 
 export const localBusinessSchema = {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": "ProfessionalService",
   name: site.nameEn,
+  description: site.description,
   image: `${site.url}/brand/smartech-logo.png`,
   url: site.url,
   telephone: site.contact.phone,

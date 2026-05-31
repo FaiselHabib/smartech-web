@@ -6,21 +6,14 @@ export type ServiceIconKey =
   | "hr"
   | "erp"
   | "ai"
-  | "maintenance"
-  | "drone"
-  | "corporate"
-  | "real-estate"
-  | "construction"
-  | "reels"
-  | "ai-edit"
-  | "studio";
+  | "maintenance";
 
 export type Service = {
   slug: string;
   title: string;
   description: string;
   icon: ServiceIconKey;
-  division: "systems" | "media";
+  division: "systems";
   highlights: string[];
 };
 
@@ -99,70 +92,4 @@ export const systemsServices: Service[] = [
   },
 ];
 
-export const mediaServices: Service[] = [
-  {
-    slug: "drone",
-    title: "تصوير الدرون",
-    description:
-      "لقطات جوية بدقة 4K للمشاريع العقارية والإنشائية والفعاليات والمواقع السياحية.",
-    icon: "drone",
-    division: "media",
-    highlights: ["4K جوّي", "ترخيص تصوير", "إخراج سينمائي"],
-  },
-  {
-    slug: "corporate",
-    title: "الفيديوهات التعريفية",
-    description:
-      "فيديوهات شركات احترافية تُقدّم خدماتك وقيمك بأسلوب بصري مؤثّر.",
-    icon: "corporate",
-    division: "media",
-    highlights: ["سكربت + إخراج", "تصوير احترافي", "مونتاج عالي الجودة"],
-  },
-  {
-    slug: "real-estate",
-    title: "تصوير العقارات",
-    description:
-      "جولات بصرية احترافية تُسرّع البيع والتأجير وتُبرز قيمة المشروع.",
-    icon: "real-estate",
-    division: "media",
-    highlights: ["جولات افتراضية", "تصوير داخلي وخارجي", "درون"],
-  },
-  {
-    slug: "construction",
-    title: "توثيق المشاريع الإنشائية",
-    description:
-      "توثيق مراحل المشاريع بدقة عالية لأغراض التسويق والتقارير الرسمية.",
-    icon: "construction",
-    division: "media",
-    highlights: ["تصوير دوري", "تقارير مرئية", "Time-lapse"],
-  },
-  {
-    slug: "reels",
-    title: "ريلز ومحتوى السوشيال",
-    description:
-      "محتوى قصير سريع التفاعل مُصمّم لـ Instagram و TikTok و Snap.",
-    icon: "reels",
-    division: "media",
-    highlights: ["ريلز قصيرة", "هوية موحّدة", "نشر دوري"],
-  },
-  {
-    slug: "ai-edit",
-    title: "المونتاج بالذكاء الاصطناعي",
-    description:
-      "تسريع الإنتاج عبر أدوات AI لتنقية الصوت، تلوين الصورة، وقصّ ذكي.",
-    icon: "ai-edit",
-    division: "media",
-    highlights: ["AI Color", "تنقية صوت", "أتمتة"],
-  },
-  {
-    slug: "studio",
-    title: "تصوير داخلي وخارجي",
-    description:
-      "جلسات تصوير منتجات، طعام، أشخاص، وتغطيات فعاليات داخل المملكة.",
-    icon: "studio",
-    division: "media",
-    highlights: ["استوديو", "إضاءة احترافية", "تنوّع مواقع"],
-  },
-];
-
-export const allServices = [...systemsServices, ...mediaServices];
+export const allServices = [...systemsServices];

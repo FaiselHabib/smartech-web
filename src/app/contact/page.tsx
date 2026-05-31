@@ -9,7 +9,7 @@ import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 export const metadata = buildMetadata({
   title: "تواصل معنا",
   description:
-    "تواصل مع سمارتك جروب — اطلب استشارة مجانية، عرض سعر، أو ابدأ مشروعك البرمجي أو الإعلامي اليوم.",
+    "تواصل مع سمارتك جروب — اطلب استشارة مجانية، عرض سعر، أو ابدأ مشروعك البرمجي اليوم.",
   path: "/contact",
 });
 

@@ -7,13 +7,6 @@ import {
   Boxes,
   BrainCircuit,
   Wrench,
-  Plane,
-  Clapperboard,
-  Building2,
-  HardHat,
-  Film,
-  Sparkles,
-  Camera,
   type LucideIcon,
 } from "lucide-react";
 import type { ServiceIconKey } from "@/content/services";
@@ -27,13 +20,6 @@ const map: Record<ServiceIconKey, LucideIcon> = {
   erp: Boxes,
   ai: BrainCircuit,
   maintenance: Wrench,
-  drone: Plane,
-  corporate: Clapperboard,
-  "real-estate": Building2,
-  construction: HardHat,
-  reels: Film,
-  "ai-edit": Sparkles,
-  studio: Camera,
 };
 
 export function ServiceIcon({

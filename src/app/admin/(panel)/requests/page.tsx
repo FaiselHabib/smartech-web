@@ -71,8 +71,6 @@ export default async function RequestsPage({
             <option value="general">عام</option>
             <option value="quote">عرض سعر</option>
             <option value="software">برمجة</option>
-            <option value="media">إعلامي</option>
-            <option value="both">برمجة + إعلامي</option>
             <option value="consultation">استشارة</option>
           </select>
         </form>
