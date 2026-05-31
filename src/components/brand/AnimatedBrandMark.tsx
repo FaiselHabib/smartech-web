@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion, type TargetAndTransition } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
@@ -16,10 +16,24 @@ import { cn } from "@/lib/utils";
  *  - Glassmorphism plate
  */
 export function AnimatedBrandMark({ className }: { className?: string }) {
+  // Honour the OS "Reduce Motion" setting (and low-power/accessibility modes).
+  // When set, we render the mark fully static — no continuous repaints — which
+  // removes the sustained GPU/CPU cost on low-end mobiles without changing the
+  // visual identity for everyone else.
+  const reduce = useReducedMotion();
+  const loop = (animate: TargetAndTransition, duration: number) =>
+    reduce
+      ? {}
+      : { animate, transition: { duration, ease: "linear" as const, repeat: Infinity } };
   return (
     <div className={cn("relative mx-auto aspect-square w-full max-w-[460px]", className)}>
       {/* Outer ambient glow */}
-      <div className="absolute inset-0 -z-10 rounded-full bg-brand-mint/25 blur-[80px] animate-pulse [animation-duration:4s]" />
+      <div
+        className={cn(
+          "absolute inset-0 -z-10 rounded-full bg-brand-mint/25 blur-[80px] [animation-duration:4s]",
+          !reduce && "animate-pulse",
+        )}
+      />
 
       {/* Conic rotating halo (large) */}
       <motion.div
@@ -29,16 +43,14 @@ export function AnimatedBrandMark({ className }: { className?: string }) {
           background:
             "conic-gradient(from 0deg, transparent 0deg, #39D2C0 90deg, transparent 180deg, #7FE3D6 270deg, transparent 360deg)",
         }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 18, ease: "linear", repeat: Infinity }}
+        {...loop({ rotate: 360 }, 18)}
       />
 
       {/* Orbit ring 1 (dashed, slow CW) */}
       <motion.div
         aria-hidden
         className="absolute inset-6 rounded-full border-2 border-dashed border-brand-mint/40"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 36, ease: "linear", repeat: Infinity }}
+        {...loop({ rotate: 360 }, 36)}
       >
         <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 size-3 rounded-full bg-brand-mint shadow-[0_0_20px_rgba(57,210,192,0.9)]" />
       </motion.div>
@@ -47,8 +59,7 @@ export function AnimatedBrandMark({ className }: { className?: string }) {
       <motion.div
         aria-hidden
         className="absolute inset-12 rounded-full border border-brand-teal/15"
-        animate={{ rotate: -360 }}
-        transition={{ duration: 28, ease: "linear", repeat: Infinity }}
+        {...loop({ rotate: -360 }, 28)}
       >
         <span className="absolute top-1/2 -right-1 -translate-y-1/2 size-2 rounded-full bg-brand-teal shadow-[0_0_14px_rgba(7,59,74,0.7)]" />
         <span className="absolute bottom-2 left-3 size-1.5 rounded-full bg-brand-mint/80" />
@@ -66,12 +77,12 @@ export function AnimatedBrandMark({ className }: { className?: string }) {
           caused the icon to drift on mobile WebKit/Blink. */}
       <motion.div
         className="pointer-events-none absolute inset-0 flex items-center justify-center"
-        animate={{ y: [0, -10, 0] }}
-        transition={{ duration: 5, ease: "easeInOut", repeat: Infinity }}
+        animate={reduce ? undefined : { y: [0, -10, 0] }}
+        transition={reduce ? undefined : { duration: 5, ease: "easeInOut", repeat: Infinity }}
       >
         <motion.div
-          animate={{ scale: [1, 1.03, 1] }}
-          transition={{ duration: 3.2, ease: "easeInOut", repeat: Infinity }}
+          animate={reduce ? undefined : { scale: [1, 1.03, 1] }}
+          transition={reduce ? undefined : { duration: 3.2, ease: "easeInOut", repeat: Infinity }}
           className="relative aspect-square w-[44%] sm:w-[56%] flex items-center justify-center"
         >
           {/* Image-level glow halo — now anchored to a definite-size parent */}

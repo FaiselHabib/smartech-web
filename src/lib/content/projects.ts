@@ -24,7 +24,33 @@ function dbCategoryToUI(c: ProjectCategoryDB): Project["categories"][number] {
   }
 }
 
-function rowToProject(row: ProjectRow): Project {
+/**
+ * Only the columns the public UI actually renders — avoids shipping heavy
+ * unused fields (full_description, gallery, seo_*, services, etc.) over the wire.
+ */
+const PROJECT_COLUMNS =
+  "slug,title_ar,title_en,short_description,cover_image,category,problem,solution,impact,technologies,project_date,created_at";
+
+type ProjectPublicRow = Pick<
+  ProjectRow,
+  | "slug"
+  | "title_ar"
+  | "title_en"
+  | "short_description"
+  | "cover_image"
+  | "category"
+  | "problem"
+  | "solution"
+  | "impact"
+  | "technologies"
+  | "project_date"
+  | "created_at"
+>;
+
+/** Abort a slow query so the page falls back to static instead of hanging. */
+const QUERY_TIMEOUT_MS = 2500;
+
+function rowToProject(row: ProjectPublicRow): Project {
   return {
     slug: row.slug,
     title: row.title_ar,
@@ -51,10 +77,12 @@ export async function getPublicProjects(): Promise<Project[]> {
     const supabase = await createSupabaseServerClient();
     const { data, error } = await supabase
       .from("projects")
-      .select("*")
+      .select(PROJECT_COLUMNS)
       .eq("status", "published")
       .order("featured", { ascending: false })
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .limit(60)
+      .abortSignal(AbortSignal.timeout(QUERY_TIMEOUT_MS));
 
     if (error) throw error;
     if (!data || data.length === 0) return staticProjects;
@@ -69,11 +97,12 @@ export async function getFeaturedProjects(limit = 4): Promise<Project[]> {
     const supabase = await createSupabaseServerClient();
     const { data, error } = await supabase
       .from("projects")
-      .select("*")
+      .select(PROJECT_COLUMNS)
       .eq("status", "published")
       .eq("featured", true)
       .order("created_at", { ascending: false })
-      .limit(limit);
+      .limit(limit)
+      .abortSignal(AbortSignal.timeout(QUERY_TIMEOUT_MS));
 
     if (error) throw error;
     if (!data || data.length === 0) {
@@ -90,9 +119,10 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     const supabase = await createSupabaseServerClient();
     const { data } = await supabase
       .from("projects")
-      .select("*")
+      .select(PROJECT_COLUMNS)
       .eq("slug", slug)
       .eq("status", "published")
+      .abortSignal(AbortSignal.timeout(QUERY_TIMEOUT_MS))
       .maybeSingle();
 
     if (data) return rowToProject(data);
