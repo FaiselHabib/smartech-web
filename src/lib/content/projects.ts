@@ -5,6 +5,19 @@ import { projects as staticProjects } from "@/content/projects";
 import type { Project } from "@/content/projects";
 
 /**
+ * Static/fallback content is only acceptable when Supabase is NOT configured
+ * (e.g. local dev before env vars are set).  Once Supabase is configured the
+ * site is fully CMS-driven: an empty database means an empty public site, not
+ * the bundled demo projects.
+ */
+function isSupabaseConfigured(): boolean {
+  return Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  );
+}
+
+/**
  * Maps the DB row to the shape the public components already expect (`Project`).
  * The legacy enum used in static data uses plural slugs (websites/apps/dashboards)
  * while the DB uses singular (website/app/dashboard).  We normalise here.
@@ -72,11 +85,12 @@ function rowToProject(row: ProjectPublicRow): Project {
 }
 
 /**
- * Returns published projects from Supabase.  Falls back to the bundled static
- * data when Supabase isn't reachable / not configured / empty — so the public
- * site keeps working pre-launch and during outages.
+ * Returns published projects from Supabase.  The bundled static data is used
+ * ONLY when Supabase isn't configured (local dev); once configured the public
+ * portfolio is whatever the CMS holds — an empty DB yields an empty list.
  */
 export async function getPublicProjects(): Promise<Project[]> {
+  if (!isSupabaseConfigured()) return staticProjects;
   try {
     const supabase = await createSupabaseServerClient();
     const { data, error } = await supabase
@@ -89,14 +103,14 @@ export async function getPublicProjects(): Promise<Project[]> {
       .abortSignal(AbortSignal.timeout(QUERY_TIMEOUT_MS));
 
     if (error) throw error;
-    if (!data || data.length === 0) return staticProjects;
-    return data.map(rowToProject);
+    return (data ?? []).map(rowToProject);
   } catch {
-    return staticProjects;
+    return [];
   }
 }
 
 export async function getFeaturedProjects(limit = 4): Promise<Project[]> {
+  if (!isSupabaseConfigured()) return staticProjects.slice(0, limit);
   try {
     const supabase = await createSupabaseServerClient();
     const { data, error } = await supabase
@@ -109,16 +123,16 @@ export async function getFeaturedProjects(limit = 4): Promise<Project[]> {
       .abortSignal(AbortSignal.timeout(QUERY_TIMEOUT_MS));
 
     if (error) throw error;
-    if (!data || data.length === 0) {
-      return staticProjects.slice(0, limit);
-    }
-    return data.map(rowToProject);
+    return (data ?? []).map(rowToProject);
   } catch {
-    return staticProjects.slice(0, limit);
+    return [];
   }
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
+  if (!isSupabaseConfigured()) {
+    return staticProjects.find((p) => p.slug === slug) ?? null;
+  }
   try {
     const supabase = await createSupabaseServerClient();
     const { data } = await supabase
@@ -131,7 +145,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
 
     if (data) return rowToProject(data);
   } catch {
-    /* fall through */
+    /* fall through to null */
   }
-  return staticProjects.find((p) => p.slug === slug) ?? null;
+  return null;
 }

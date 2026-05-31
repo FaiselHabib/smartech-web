@@ -9,6 +9,10 @@ import {
 export function FeaturedProjects({ projects }: { projects?: Project[] } = {}) {
   const featured = (projects ?? staticProjects).slice(0, 6);
 
+  // CMS-driven: when there are no featured projects, hide the section entirely
+  // rather than render an empty showcase.
+  if (featured.length === 0) return null;
+
   return (
     <Section className="bg-brand-mintSoft/50">
       <div className="container-pad">
